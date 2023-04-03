@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\Icon.ico" />
     <Content Include="Resources\LockClosed.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
