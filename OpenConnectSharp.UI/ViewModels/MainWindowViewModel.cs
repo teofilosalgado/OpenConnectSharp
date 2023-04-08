@@ -1,82 +1,78 @@
 ﻿using Caliburn.Micro;
 using Mapster;
 using OpenConnectSharp.Application.Interfaces;
-using OpenConnectSharp.Domain.Enums;
 using OpenConnectSharp.Domain.Models;
-using System.Diagnostics;
+using System;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 
 namespace OpenConnectSharp.UI.ViewModels
 {
     public class MainWindowViewModel : Screen
     {
-        private readonly IWindowManager windowManager;
         private readonly IOpenConnectService openConnectService;
 
-        public string StatusLabelColor { get; set; } = "#FFB71C1C";
-        public string StatusIconPath { get; set; } = "/Resources/LockOpen.png";
-        public string ActionButtonLabel { get; set; } = "Connect";
-
-        public Form Form { get; set; } = new Form();
-        public Status Status { get; set; } = new Status();
+        public MainWindowForm MainWindowForm { get; set; } = new MainWindowForm();
+        public MainWindowStatus MainWindowStatus { get; set; } = new MainWindowStatus();
 
         private void UpdateUserSettings()
         {
-            if (Form.SaveCredentials)
+            if (MainWindowForm.SaveCredentials)
             {
-                this.Form.Adapt(Properties.Settings.Default);
+                this.MainWindowForm.Adapt(Properties.Settings.Default);
             }
             else
             {
                 Properties.Settings.Default.Reset();
             }
-            Properties.Settings.Default.SaveCredentials = this.Form.SaveCredentials;
+            Properties.Settings.Default.SaveCredentials = this.MainWindowForm.SaveCredentials;
             Properties.Settings.Default.Save();
         }
 
         private void ReadUserSettings()
         {
-            Properties.Settings.Default.Adapt(this.Form);
+            Properties.Settings.Default.Adapt(this.MainWindowForm);
         }
 
-        private void OnProcessExited(object? sender, int exitCode)
+        private void OnConnected(object? sender, EventArgs e)
+        {
+            MainWindowStatus.Connect();
+            NotifyOfPropertyChange(nameof(MainWindowStatus));
+        }
+
+        private void OnDisconnected(object? sender, int exitCode)
         {
             if (exitCode == 1)
             {
                 MessageBox.Show("Something went wrong. Check your credentials or network connection.", "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            MainWindowStatus.Disconnect();
+            NotifyOfPropertyChange(nameof(MainWindowStatus));
         }
 
-        private void OnConnected(object? sender, Connection connection)
+        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
-            openConnectService.Start(this.Form);
-        }
-
-        private void OnDisconnected(object? sender, Connection connection)
-        {
-            openConnectService.Stop();
+            this.openConnectService.Stop();
+            return base.CanCloseAsync(cancellationToken);
         }
 
         public void OnClickActionButton()
         {
             this.UpdateUserSettings();
-            this.Status.Toggle();
-            NotifyOfPropertyChange(nameof(Status));
+            this.openConnectService.Toggle(this.MainWindowForm);
         }
 
         public void OnClickViewLog()
         {
-
+            // TODO
         }
 
-        public MainWindowViewModel(IWindowManager windowManager, IOpenConnectService openConnectService)
+        public MainWindowViewModel(IOpenConnectService openConnectService)
         {
-            this.windowManager = windowManager;
             this.openConnectService = openConnectService;
-            this.openConnectService.ProcessExited += OnProcessExited;
-
-            this.Status.Connected += OnConnected;
-            this.Status.Disconnected += OnDisconnected;
+            this.openConnectService.Connected += OnConnected;
+            this.openConnectService.Disconnected += OnDisconnected;
 
             this.DisplayName = "OpenConnectSharp";
 

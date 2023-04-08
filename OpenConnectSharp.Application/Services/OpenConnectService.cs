@@ -1,25 +1,46 @@
 ﻿using OpenConnectSharp.Application.Interfaces;
 using System.Diagnostics;
 using OpenConnectSharp.Domain.Models;
+using OpenConnectSharp.Domain.Enums;
 
 namespace OpenConnectSharp.Application.Services
 {
     public class OpenConnectService : IOpenConnectService
     {
         private Process? process;
+        private Connection connection;
 
-        public event EventHandler<int>? ProcessExited;
+        public event EventHandler? Connected;
+        public event EventHandler<int>? Disconnected;
+
+        public OpenConnectService()
+        {
+            this.connection = Connection.Disconnected;
+        }
 
         private void OnProcessExited(object? sender, EventArgs e)
         {
-            if (process is null || ProcessExited is null)
+            if (process is null || Disconnected is null)
                 return;
 
             int exitCode = process.ExitCode;
-            ProcessExited.Invoke(this, exitCode);
+            this.connection = Connection.Disconnected;
+            Disconnected.Invoke(this, exitCode);
         }
 
-        public void Start(Form credentials)
+        public void Toggle(MainWindowForm credentials)
+        {
+            if(this.connection == Connection.Disconnected)
+            {
+                this.Start(credentials);
+            }
+            else
+            {
+                this.Stop();
+            }
+        }
+
+        public void Start(MainWindowForm credentials)
         {
             this.process = new Process
             {
@@ -35,17 +56,22 @@ namespace OpenConnectSharp.Application.Services
             process.Exited += OnProcessExited;
             process.Start();
 
+            Connected?.Invoke(this, EventArgs.Empty);
+
             process.StandardInput.AutoFlush = true;
             process.StandardInput.WriteLine("yes");
             process.StandardInput.WriteLine(credentials.Password);
             process.StandardInput.Close();
 
             process.WaitForExitAsync();
+
+            this.connection = Connection.Connected;
         }
 
         public void Stop()
         {
             process?.Kill();
+            this.connection = Connection.Disconnected;
         }
     }
 }

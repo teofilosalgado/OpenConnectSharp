@@ -1,6 +1,6 @@
 ﻿namespace OpenConnectSharp.Domain.Models
 {
-    public class Form
+    public class MainWindowForm
     {
         public string Gateway { get; set; } = string.Empty;
         public string Group { get; set; } = string.Empty;
