@@ -1,68 +1,86 @@
 ﻿using Caliburn.Micro;
-using System.Dynamic;
+using Mapster;
+using OpenConnectSharp.Application.Interfaces;
+using OpenConnectSharp.Domain.Enums;
+using OpenConnectSharp.Domain.Models;
+using System.Diagnostics;
 using System.Windows;
 
 namespace OpenConnectSharp.UI.ViewModels
 {
-	public class MainWindowViewModel : Screen
+    public class MainWindowViewModel : Screen
     {
         private readonly IWindowManager windowManager;
+        private readonly IOpenConnectService openConnectService;
 
-        private bool status = false;
+        public string StatusLabelColor { get; set; } = "#FFB71C1C";
+        public string StatusIconPath { get; set; } = "/Resources/LockOpen.png";
+        public string ActionButtonLabel { get; set; } = "Connect";
 
-		public bool Status
-		{
-			get { return status; }
-			set { 
-				if(!status)
-				{
-					StatusLabelColor = "#FF1B5E20";
-                    StatusIconPath = "/Resources/LockClosed.png";
-                    IsIndeterminate = true;
-                } else
-				{
-					StatusLabelColor = "#FFB71C1C";
-					StatusIconPath = "/Resources/LockOpen.png";
-                    IsIndeterminate = false;
-                }
-                NotifyOfPropertyChange();
-                NotifyOfPropertyChange(nameof(StatusLabelColor));
-                NotifyOfPropertyChange(nameof(StatusIconPath));
-                NotifyOfPropertyChange(nameof(IsIndeterminate));
-                status = value;
+        public Form Form { get; set; } = new Form();
+        public Status Status { get; set; } = new Status();
+
+        private void UpdateUserSettings()
+        {
+            if (Form.SaveCredentials)
+            {
+                this.Form.Adapt(Properties.Settings.Default);
             }
-		}
+            else
+            {
+                Properties.Settings.Default.Reset();
+            }
+            Properties.Settings.Default.SaveCredentials = this.Form.SaveCredentials;
+            Properties.Settings.Default.Save();
+        }
 
-		public string StatusLabelColor { get; set; } = "#FFB71C1C";
-		public string StatusIconPath { get; set; } = "/Resources/LockOpen.png";
-        public bool IsIndeterminate { get; set; } = false;
+        private void ReadUserSettings()
+        {
+            Properties.Settings.Default.Adapt(this.Form);
+        }
 
-        public string Gateway { get; set; } = string.Empty;
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        private void OnProcessExited(object? sender, int exitCode)
+        {
+            if (exitCode == 1)
+            {
+                MessageBox.Show("Something went wrong. Check your credentials or network connection.", "Connection error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
-        //public void OnClickNewProfile()
-        //{
-        //          dynamic settings = new ExpandoObject();
-        //          settings.WindowStyle = WindowStyle.ToolWindow;
-        //          settings.ShowInTaskbar = false;
-        //          windowManager.ShowWindowAsync(new CreateProfileViewModel(), null, settings);
-        //}
+        private void OnConnected(object? sender, Connection connection)
+        {
+            openConnectService.Start(this.Form);
+        }
 
-        public void OnClickConnect()
-		{
-			this.Status = !this.Status;
-		}
+        private void OnDisconnected(object? sender, Connection connection)
+        {
+            openConnectService.Stop();
+        }
+
+        public void OnClickActionButton()
+        {
+            this.UpdateUserSettings();
+            this.Status.Toggle();
+            NotifyOfPropertyChange(nameof(Status));
+        }
 
         public void OnClickViewLog()
         {
 
         }
 
-        public MainWindowViewModel(IWindowManager windowManager)
-		{
-			this.windowManager = windowManager;
+        public MainWindowViewModel(IWindowManager windowManager, IOpenConnectService openConnectService)
+        {
+            this.windowManager = windowManager;
+            this.openConnectService = openConnectService;
+            this.openConnectService.ProcessExited += OnProcessExited;
+
+            this.Status.Connected += OnConnected;
+            this.Status.Disconnected += OnDisconnected;
+
             this.DisplayName = "OpenConnectSharp";
+
+            this.ReadUserSettings();
         }
     }
 }

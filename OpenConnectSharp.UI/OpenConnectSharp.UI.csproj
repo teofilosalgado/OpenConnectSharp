@@ -26,10 +26,27 @@
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+    <PackageReference Include="Mapster" Version="7.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenConnectSharp.Application\OpenConnectSharp.Application.csproj" />
     <ProjectReference Include="..\OpenConnectSharp.Domain\OpenConnectSharp.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

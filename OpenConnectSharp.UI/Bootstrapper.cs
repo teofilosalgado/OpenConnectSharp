@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System;
 using System.Dynamic;
 using System.Windows;
+using OpenConnectSharp.Application.Interfaces;
+using OpenConnectSharp.Application.Services;
 
 namespace OpenConnectSharp.UI
 {
@@ -25,7 +27,11 @@ namespace OpenConnectSharp.UI
 
         protected override void Configure()
         {
+            // Services
             container.Singleton<IWindowManager, WindowManager>();
+            container.Singleton<IOpenConnectService, OpenConnectService>();
+
+            // Views
             container.Singleton<MainWindowViewModel>();
         }
 

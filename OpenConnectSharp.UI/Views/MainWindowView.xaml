@@ -7,13 +7,13 @@
              xmlns:utils="clr-namespace:OpenConnectSharp.UI.Utils"
              mc:Ignorable="d" 
              Height="Auto" Width="400" MinWidth="400" Background="White">
-    <StackPanel Margin="0,10,0,0" Orientation="Vertical" >
+    <StackPanel Margin="0,5,0,10" Orientation="Vertical" >
         <Grid Margin="10,0,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Image Grid.Row="0" Grid.Column="0" Source="{Binding StatusIconPath}" d:Source="/Resources/LockOpen.png" Stretch="Uniform" />
+            <Image Grid.Row="0" Grid.Column="0" Source="{Binding Status.IconSource}" d:Source="/Resources/LockOpen.png" Stretch="Uniform" />
             <StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Vertical" Margin="5,0,0,0">
                 <Grid VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
@@ -21,6 +21,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="1*"></RowDefinition>
@@ -37,24 +38,25 @@
                         </Style>
                     </Grid.Resources>
                     <Label Grid.Column="0" Grid.Row="0" Content="Gateway:" Height="25" />
-                    <TextBox x:Name="Gateway" Grid.Column="1" Grid.Row="0" Height="25" VerticalContentAlignment="Center" />
-                    <Label Grid.Column="0" Grid.Row="1" Content="Username:" Height="25" />
-                    <TextBox x:Name="Username" Grid.Column="1" Grid.Row="1" Height="25" VerticalContentAlignment="Center" />
-                    <Label Grid.Column="0" Grid.Row="2" Content="Password:" Height="25" />
-                    <PasswordBox x:Name="Password" Grid.Column="1" Grid.Row="2" Height="25" VerticalContentAlignment="Center" utils:PasswordBoxHelper.BindPassword="True" utils:PasswordBoxHelper.BoundPassword="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                    <TextBox Text="{Binding Path=Form.Gateway}" Grid.Column="1" Grid.Row="0" Height="25" VerticalContentAlignment="Center" />
+                    <Label Grid.Column="0" Grid.Row="1" Content="Group:" Height="25" />
+                    <TextBox Text="{Binding Path=Form.Group}" Grid.Column="1" Grid.Row="1" Height="25" VerticalContentAlignment="Center" />
+                    <Label Grid.Column="0" Grid.Row="2" Content="Username:" Height="25" />
+                    <TextBox Text="{Binding Path=Form.Username}" Grid.Column="1" Grid.Row="2" Height="25" VerticalContentAlignment="Center" />
+                    <Label Grid.Column="0" Grid.Row="3" Content="Password:" Height="25" />
+                    <PasswordBox Grid.Column="1" Grid.Row="3" Height="25" VerticalContentAlignment="Center" utils:PasswordBoxHelper.BindPassword="True" utils:PasswordBoxHelper.BoundPassword="{Binding Path=Form.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
                 </Grid>
-                <Button x:Name="OnClickConnect" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Content="Connect" Height="25" Margin="0,5,0,0"/>
-                <CheckBox Content="Save credentials" Margin="0,5,0,0"/>
+                <Button x:Name="OnClickActionButton" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Content="{Binding Status.ActionButtonContent}" d:Content="Connect" Height="25" Margin="0,5,0,0"/>
+                <CheckBox IsChecked="{Binding Path=Form.SaveCredentials}" d:IsChecked="False" Content="Save credentials" Margin="0,5,0,0"/>
                 <Separator Margin="0,5,0,5" VerticalAlignment="Bottom" />
                 <Grid>
                     <StackPanel Orientation="Horizontal">
                         <Label Height="25" Content="Status:" />
-                        <Label Height="25" Content="Disconnected" Foreground="{Binding StatusLabelColor}" d:Foreground="#FFB71C1C" FontWeight="Bold" />
+                        <Label Height="25" Content="{Binding Path=Status.LabelContent}" Foreground="{Binding Status.LabelForeground}" d:Content="Disconnected" d:Foreground="#FFB71C1C" FontWeight="Bold" />
                     </StackPanel>
                     <Button x:Name="OnClickViewLog" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,0,5,0" Content="View Logs" Height="25"/>
                 </Grid>
             </StackPanel>
         </Grid>
-        <ProgressBar IsIndeterminate="{Binding Path=IsIndeterminate}" d:IsIndeterminate="False" Margin="0,10,0,0" Height="5" />
     </StackPanel>
 </UserControl>
