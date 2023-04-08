@@ -65,7 +65,7 @@ namespace OpenConnectSharp.UI.ViewModels
 
         public void OnClickViewLog()
         {
-            // TODO
+            // TODO: open log file with file viewer
         }
 
         public MainWindowViewModel(IOpenConnectService openConnectService)
