@@ -3,6 +3,7 @@ using System.Diagnostics;
 using OpenConnectSharp.Domain.Models;
 using OpenConnectSharp.Domain.Enums;
 using Microsoft.Win32;
+using Serilog;
 
 namespace OpenConnectSharp.Application.Services
 {
@@ -19,13 +20,12 @@ namespace OpenConnectSharp.Application.Services
 
         public OpenConnectService()
         {
-            if (!OperatingSystem.IsWindows())
-                return;
-            SystemEvents.PowerModeChanged += OnPowerChanged;
+
         }
 
         private void OnProcessExited(object? sender, EventArgs e)
         {
+            Log.Debug("Process exited");
             if (process is null || Disconnected is null)
                 return;
 
@@ -36,7 +36,7 @@ namespace OpenConnectSharp.Application.Services
 
         public void Toggle(MainWindowForm credentials)
         {
-            if(this.connection == Connection.Disconnected)
+            if (this.connection == Connection.Disconnected)
             {
                 this.Start(credentials);
             }
@@ -48,6 +48,7 @@ namespace OpenConnectSharp.Application.Services
 
         public void Start(MainWindowForm credentials)
         {
+            Log.Debug("Starting openconnect.exe process");
             this.mainWindowFormCache = credentials;
             this.process = new Process
             {
@@ -69,34 +70,49 @@ namespace OpenConnectSharp.Application.Services
             process.StandardInput.WriteLine("yes");
             process.StandardInput.WriteLine(credentials.Password);
             process.StandardInput.Close();
-
             process.WaitForExitAsync();
 
             this.connection = Connection.Connected;
+
+            if (!OperatingSystem.IsWindows())
+                return;
+            SystemEvents.PowerModeChanged += OnPowerChanged;
         }
 
         public void Stop()
         {
-            process?.Kill();
+            if (process is null)
+                return;
+
+            Log.Debug("Stopping process");
             this.connection = Connection.Disconnected;
+            process.Kill();
+
+            if (!OperatingSystem.IsWindows() || shouldRestartOnResume)
+                return;
+            SystemEvents.PowerModeChanged -= OnPowerChanged;
         }
 
         private void OnResumed()
         {
-            Trace.WriteLine("OnResumed");
+            Log.Debug("Power mode changed to: Resume");
             if (this.shouldRestartOnResume && this.mainWindowFormCache is not null)
             {
+                Log.Debug("Reopening connection");
                 this.Start(this.mainWindowFormCache);
+                this.shouldRestartOnResume = false;
             }
         }
 
         private void OnSuspended()
         {
-            Trace.WriteLine("OnSuspended");
+            Log.Debug("Power mode changed to: Suspend");
             if (this.connection == Connection.Connected)
             {
-                this.Stop();
+                Log.Debug("Scheduling connection to be reopened when resumed");
                 shouldRestartOnResume = true;
+                Log.Debug("Closing connection to the gateway");
+                this.Stop();
             }
         }
 

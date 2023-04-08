@@ -6,6 +6,7 @@ using System.Dynamic;
 using System.Windows;
 using OpenConnectSharp.Application.Interfaces;
 using OpenConnectSharp.Application.Services;
+using Serilog;
 
 namespace OpenConnectSharp.UI
 {
@@ -20,6 +21,12 @@ namespace OpenConnectSharp.UI
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("log_.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+                .CreateLogger();
+
+            Log.Debug("Displaying main window asynchronously");
             dynamic settings = new ExpandoObject();
             settings.ResizeMode = ResizeMode.NoResize;
             DisplayRootViewForAsync<MainWindowViewModel>(settings);
