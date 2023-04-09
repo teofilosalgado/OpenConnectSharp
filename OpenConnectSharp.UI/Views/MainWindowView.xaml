@@ -38,13 +38,13 @@
                         </Style>
                     </Grid.Resources>
                     <Label Grid.Column="0" Grid.Row="0" Content="Gateway:" Height="25" />
-                    <TextBox Text="{Binding Path=MainWindowForm.Gateway}" Grid.Column="1" Grid.Row="0" Height="25" VerticalContentAlignment="Center" />
+                    <TextBox Text="{Binding Path=MainWindowForm.Gateway}" Grid.Column="1" Grid.Row="0" Height="25" VerticalContentAlignment="Center" IsEnabled="{Binding Path=MainWindowStatus.IsFormEnabled}" />
                     <Label Grid.Column="0" Grid.Row="1" Content="Group:" Height="25" />
-                    <TextBox Text="{Binding Path=MainWindowForm.Group}" Grid.Column="1" Grid.Row="1" Height="25" VerticalContentAlignment="Center" />
+                    <TextBox Text="{Binding Path=MainWindowForm.Group}" Grid.Column="1" Grid.Row="1" Height="25" VerticalContentAlignment="Center" IsEnabled="{Binding Path=MainWindowStatus.IsFormEnabled}" />
                     <Label Grid.Column="0" Grid.Row="2" Content="Username:" Height="25" />
-                    <TextBox Text="{Binding Path=MainWindowForm.Username}" Grid.Column="1" Grid.Row="2" Height="25" VerticalContentAlignment="Center" />
+                    <TextBox Text="{Binding Path=MainWindowForm.Username}" Grid.Column="1" Grid.Row="2" Height="25" VerticalContentAlignment="Center" IsEnabled="{Binding Path=MainWindowStatus.IsFormEnabled}" />
                     <Label Grid.Column="0" Grid.Row="3" Content="Password:" Height="25" />
-                    <PasswordBox Grid.Column="1" Grid.Row="3" Height="25" VerticalContentAlignment="Center" utils:PasswordBoxHelper.BindPassword="True" utils:PasswordBoxHelper.BoundPassword="{Binding Path=MainWindowForm.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                    <PasswordBox Grid.Column="1" Grid.Row="3" Height="25" VerticalContentAlignment="Center" utils:PasswordBoxHelper.BindPassword="True" IsEnabled="{Binding Path=MainWindowStatus.IsFormEnabled}" utils:PasswordBoxHelper.BoundPassword="{Binding Path=MainWindowForm.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
                 </Grid>
                 <Button x:Name="OnClickActionButton" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Content="{Binding MainWindowStatus.ActionButtonContent}" d:Content="Connect" Height="25" Margin="0,5,0,0"/>
                 <CheckBox IsChecked="{Binding Path=MainWindowForm.SaveCredentials}" d:IsChecked="False" Content="Save credentials" Margin="0,5,0,0"/>
