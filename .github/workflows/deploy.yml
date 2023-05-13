@@ -15,7 +15,10 @@ jobs:
         uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 7.x
-      - run: dotnet restore
-      - run: dotnet build -c Release --no-restore
-      - run: dotnet publish -c Release --runtime win-x64
-        
+      - name: Restore solution
+        run: dotnet restore
+      - name: Build solution
+        run: dotnet build -c Release --no-restore
+      - name: Publish solution
+        run: dotnet publish -c Release --no-build --no-self-contained --runtime win-x64
+      - run: ls
