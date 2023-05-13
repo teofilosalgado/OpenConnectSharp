@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using Serilog;
+using System.Diagnostics;
 
 namespace OpenConnectSharp.UI.ViewModels
 {
@@ -74,7 +75,17 @@ namespace OpenConnectSharp.UI.ViewModels
 
         public void OnClickViewLog()
         {
-            // TODO: open log file with file viewer
+            string? logFilePath = Bootstrapper.CaptureLogFilePathHook.Path;
+            if (logFilePath is null) {
+                return;
+            }
+            new Process
+            {
+                StartInfo = new ProcessStartInfo(logFilePath)
+                {
+                    UseShellExecute = true
+                }
+            }.Start();
         }
 
         public MainWindowViewModel(IOpenConnectService openConnectService)

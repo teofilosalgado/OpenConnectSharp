@@ -7,12 +7,14 @@ using System.Windows;
 using OpenConnectSharp.Application.Interfaces;
 using OpenConnectSharp.Application.Services;
 using Serilog;
+using OpenConnectSharp.UI.Hooks;
 
 namespace OpenConnectSharp.UI
 {
     public class Bootstrapper : BootstrapperBase
     {
         private SimpleContainer container = new SimpleContainer();
+        public static CaptureLogFilePathHook CaptureLogFilePathHook = new CaptureLogFilePathHook();
 
         public Bootstrapper()
         {
@@ -23,7 +25,7 @@ namespace OpenConnectSharp.UI
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("log_.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+                .WriteTo.File("log_.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7, hooks: CaptureLogFilePathHook)
                 .CreateLogger();
 
             Log.Debug("Displaying main window asynchronously");
