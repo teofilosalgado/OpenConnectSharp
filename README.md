@@ -13,7 +13,9 @@ A windows-only alternative client for Cisco's AnyConnect VPN protocol based on [
 1. Clone this repository and build the solution.
 2. Install OpenConnect from the [official repository](https://www.infradead.org/openconnect/) . Don't forget to add it to the PATH.
 3. Copy [this script](https://github.com/teofilosalgado/OpenConnectSharp/blob/master/OpenConnectSharp.UI/Resources/vpnc-script-win.js) to your OpenConnect installation folder root (usually `C:\Program Files\OpenConnect`). Replace it if necessary.
-4. Run the built application.
+4. Download the latest release from [this link](https://github.com/teofilosalgado/OpenConnectSharp/releases/latest/download/release.zip) and extract it.
+5. Run `OpenConnectSharp.UI.exe` as administrator.
+6. Profit!
 
 # Screenshots
 
