@@ -17,7 +17,7 @@
     <PackageProjectUrl>https://github.com/teofilosalgado/OpenConnectSharp</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/teofilosalgado/OpenConnectSharp</RepositoryUrl>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
   </PropertyGroup>
 
