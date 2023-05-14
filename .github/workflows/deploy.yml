@@ -16,12 +16,8 @@ jobs:
         uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 7.x
-      - name: Restore solution
-        run: dotnet restore
-      - name: Build solution
-        run: dotnet build --no-restore -c Release
       - name: Publish solution
-        run: dotnet publish --no-build -p:PublishProfile=FolderProfile
+        run: dotnet publish -p:PublishProfile=FolderProfile
       - name: Compress archive
         run: Compress-Archive -Path "OpenConnectSharp.UI/bin/Release/net7.0-windows/win-x64/publish/*" -DestinationPath "release.zip" -Force
       - name: Create Release
