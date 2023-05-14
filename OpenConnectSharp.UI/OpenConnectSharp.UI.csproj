@@ -9,6 +9,16 @@
     <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
     <PlatformTarget>x64</PlatformTarget>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PackageId>OpenConnectSharp</PackageId>
+    <Title>OpenConnectSharp</Title>
+    <Authors>teofilosalgado</Authors>
+    <Product>OpenConnectSharp</Product>
+    <Description>A windows-only alternative client for Cisco's AnyConnect VPN protocol based on OpenConnect.</Description>
+    <PackageProjectUrl>https://github.com/teofilosalgado/OpenConnectSharp</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/teofilosalgado/OpenConnectSharp</RepositoryUrl>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +34,13 @@
     <Content Include="Resources\LockOpen.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
