@@ -19,9 +19,9 @@ jobs:
       - name: Restore solution
         run: dotnet restore
       - name: Build solution
-        run: dotnet build -c Release --no-restore
+        run: dotnet build --no-restore -c Release
       - name: Publish solution
-        run: dotnet publish -c Release --no-build
+        run: dotnet publish --no-build -p:PublishProfile=FolderProfile
       - name: Compress archive
         run: Compress-Archive -Path "OpenConnectSharp.UI/bin/Release/net7.0-windows/win-x64/publish/*" -DestinationPath "release.zip" -Force
       - name: Create Release
