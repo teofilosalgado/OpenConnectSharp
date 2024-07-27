@@ -16,13 +16,7 @@ A windows-only alternative client for Cisco's AnyConnect VPN protocol based on [
 4. Run `OpenConnectSharp.UI.exe` as administrator.
 5. Profit!
 
-# Screenshots
+# Usage
 
 ![application screenshot while connected](static/connected.png)
 ![application screenshot while disconnected](static/disconnected.png)
-
-# To Do
-
-- [ ] Create an installer bundling the OpenConnect executable and script.
-- [ ] Design CI/CD pipelines using Github workflows.
-- [ ] Add support for other protocols.
