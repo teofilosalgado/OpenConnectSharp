@@ -8,7 +8,7 @@ A windows-only alternative client for Cisco's AnyConnect VPN protocol based on [
 - Modern and simple .NET 7 based WPF application with a relatively low memory footprint.
 - Automatic management of Windows power events preventing disconnections whenever the computer sleeps or hibernates.
 
-# Instalation
+# Installation
 
 1. Install OpenConnect CLI from the [official repository](https://www.infradead.org/openconnect/) . Don't forget to add it to the PATH.
 2. Copy [this script](https://github.com/teofilosalgado/OpenConnectSharp/blob/master/OpenConnectSharp.UI/Resources/vpnc-script-win.js) to your OpenConnect installation folder root (usually `C:\Program Files\OpenConnect`). Replace it if necessary.
