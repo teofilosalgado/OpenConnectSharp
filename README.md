@@ -18,7 +18,7 @@ A windows-only alternative client for Cisco's AnyConnect VPN protocol based on [
 
 # Usage
 
-1. Fill in the fields according to your VPN settings and credentials. Feel free to check the "Save credentials" checkbox to save your connection properties for the next session.
+1. Fill in the fields according to your VPN settings and credentials. Feel free to check the "Save credentials" checkbox to save your connection properties for the next sessions.
 
 ![application screenshot while disconnected](static/disconnected.png)
 
